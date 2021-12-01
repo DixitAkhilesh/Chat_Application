@@ -23,14 +23,14 @@ public class Server extends JFrame
 	public Server(){
 		try
 		{
-			// server = new ServerSocket(7777);
-			// System.out.println("Server is ready to connect...");
-			// System.out.println("waiting...");
-			// socket = server.accept();
-			// System.out.println("Succcessfully Connected!");
+			server = new ServerSocket(7777);
+			System.out.println("Server is ready to connect...");
+			System.out.println("waiting...");
+			socket = server.accept();
+			System.out.println("Succcessfully Connected!");
 
-			// br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			// out = new PrintWriter(socket.getOutputStream());
+			br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			out = new PrintWriter(socket.getOutputStream());
 
 			createGUI();
 			handleEvents();
