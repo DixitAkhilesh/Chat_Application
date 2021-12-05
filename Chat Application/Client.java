@@ -98,8 +98,8 @@ public class Client extends JFrame
 		this.setLayout(new BorderLayout());
 
 		add(heading, BorderLayout.NORTH);
-		// JScrollPane jScrollPane = new JScrollPane(messageArea);
-		add(messageArea , BorderLayout.CENTER);
+		JScrollPane jScrollPane = new JScrollPane(messageArea);
+		add(jScrollPane , BorderLayout.CENTER);
 		add(messageInput, BorderLayout.SOUTH);
 
 	}
@@ -116,12 +116,12 @@ public class Client extends JFrame
 					String message = br.readLine();
 					if(message.equals("exit"))
 					{
-						JOptionPane.showMessageDialog(this,"Server Terminated the chat.");
+						JOptionPane.showMessageDialog(this,"Boss Terminated the chat.");
 						socket.close();
 						System.exit(1);
 						break;
 					}
-					messageArea.append("Server: " + message + "\n");
+					messageArea.append("Boss: " + message + "\n");
 				}
 				
 			}
@@ -134,40 +134,6 @@ public class Client extends JFrame
 		new Thread(r1).start();
 	}
 
-	// public void Write()
-	// {
-	// 	Runnable r2=()->
-	// 	{
-			
-	// 		try
-	// 			{
-	// 				while(true)
-	// 				{
-
-	// 					BufferedReader br1 = new BufferedReader(new InputStreamReader(System.in));
-	// 					String content = br1.readLine();
-
-	// 					out.println(content);
-	// 					out.flush();
-
-	// 					if(content.equals("exit"))
-	// 					{
-	// 						System.out.println("You terminated the chat.");
-	// 						socket.close();
-	// 						break;
-	// 					}
-
-	// 				}
-				
-	// 		}
-	// 		catch (Exception e)
-	// 		{
-	// 			//e.PrintStackTrace();	
-	// 		}
-		
-	// 	};
-	// 	new Thread(r2).start();
-	// }
 
 	public static void main(String[] args)
 	{
