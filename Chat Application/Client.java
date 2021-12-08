@@ -5,41 +5,48 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class Client extends JFrame
+public class Server extends JFrame
 {
+
 	ServerSocket server;
 	Socket socket;
 	BufferedReader br;
 	PrintWriter out;
 
-	private JLabel heading = new JLabel("Client Area");
-	private JTextArea messageArea = new JTextArea();
-	private JTextField messageInput = new JTextField();
-	private Font font = new Font("Roboto",Font.BOLD,20);
-	private Font font1 = new Font("Roboto",Font.PLAIN,20);
+	//GUI COMPONENTS
+	JTextArea messageArea = new JTextArea();
+	JTextField messageInput = new JTextField();
+	Font font = new Font("Roboto",Font.BOLD,20);
+	Font font1 = new Font("Roboto",Font.PLAIN,20);
+	String name;
+	String password;
 
-	public Client()
+	public Server()
 	{
+
+	}
+
+	public Server(String name , String password){
 		try
 		{
-			System.out.println("Sending Request to server...");
-			socket = new Socket("127.0.0.1",7777);
-			System.out.println("Successfully Connected...");
+			this.name = name;
+			this.password = password;
+			server = new ServerSocket(Integer.parseInt(password));
+			createGUI();
+			socket = server.accept();
 
 			br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			out = new PrintWriter(socket.getOutputStream());
 
-			createGUI();
 			handleEvents();
 			Read();
 		}
 		catch (Exception e)
 		{
-			
+
 		}
 	}
 
-	
 	private void handleEvents()
 	{
 		messageInput.addKeyListener(new KeyListener()
@@ -63,11 +70,11 @@ public class Client extends JFrame
 					String message = messageInput.getText();
 					if(message == "exit")
 					{
-						System.exit(1);
+
 					}
 					else
 					{
-						messageArea.append("Me: " + message + "\n" );
+						messageArea.append(name + ": " + message + "\n" );
 						out.println(message);
 						out.flush();
 						messageInput.setText("");
@@ -81,34 +88,40 @@ public class Client extends JFrame
 
 	public void createGUI()
 	{
+		
+		JLabel heading = new JLabel(name + "'s Area");
+		messageArea.setLineWrap(true);
 		this.setTitle("CHAT APPLICATION");
 		this.setSize(600,700);
-		this.setLocation(800, 150);
+		this.setLocation(200, 100);
 		this.setAlwaysOnTop(true);
 		this.setVisible(true);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+		JLabel w = new JLabel(name + " is ready to connect ... waiting...");
 		heading.setFont(font);
 		messageArea.setFont(font1);
-		messageArea.setEditable(false);
 		messageInput.setFont(font1);
+		w.setFont(font1);
+		messageArea.setEditable(false);
 		heading.setHorizontalAlignment(SwingConstants.CENTER);
 		heading.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
 
 		this.setLayout(new BorderLayout());
 
 		add(heading, BorderLayout.NORTH);
+		this.add(w);
 		JScrollPane jScrollPane = new JScrollPane(messageArea);
 		add(jScrollPane , BorderLayout.CENTER);
 		add(messageInput, BorderLayout.SOUTH);
 
 	}
-	
 
 	public void Read()
 	{
-		Runnable r1 =()->
+		Runnable r1=()->
 		{
+			
 			try
 			{
 				while(true)
@@ -116,27 +129,27 @@ public class Client extends JFrame
 					String message = br.readLine();
 					if(message.equals("exit"))
 					{
-						JOptionPane.showMessageDialog(this,"Boss Terminated the chat.");
+						JOptionPane.showMessageDialog(this,"Employee Terminated the chat.");
+						messageInput.setEnabled(false);
 						socket.close();
 						System.exit(1);
-						break;
+						break;		
 					}
-					messageArea.append("Boss: " + message + "\n");
+
+					messageArea.append("Employee: " + message + "\n");
 				}
-				
 			}
 			catch (Exception e)
 			{
-					
+				
 			}
 		};
 
 		new Thread(r1).start();
 	}
 
-
 	public static void main(String[] args)
 	{
-		new Client();
+		new Server();
 	}
 }
