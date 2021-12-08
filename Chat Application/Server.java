@@ -12,14 +12,14 @@ public class Server extends JFrame
 	Socket socket;
 	BufferedReader br;
 	PrintWriter out;
+	String name;
+	String password;
 
 	//GUI COMPONENTS
 	JTextArea messageArea = new JTextArea();
 	JTextField messageInput = new JTextField();
 	Font font = new Font("Roboto",Font.BOLD,20);
 	Font font1 = new Font("Roboto",Font.PLAIN,20);
-	String name;
-	String password;
 
 	public Server()
 	{
@@ -70,12 +70,14 @@ public class Server extends JFrame
 					String message = messageInput.getText();
 					if(message == "exit")
 					{
-
+						JOptionPane.showMessageDialog(this,"Server Terminated the chat.");
+						socket.close();
+						System.exit(1);
+						break;
 					}
 					else
 					{
 						messageArea.append(name + ": " + message + "\n" );
-						out.println(message);
 						out.flush();
 						messageInput.setText("");
 						messageInput.requestFocus();
